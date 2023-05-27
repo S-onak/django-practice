@@ -1,6 +1,7 @@
 from django.urls import path
-from todo.views import todos
+from todo.views import todos, index
 
 urlpatterns = [
-    path('', todos)
+    path('', todos),
+    path('index/', index),
 ]
