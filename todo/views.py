@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from . models import TodoList
 
 from todo.models import TodoList
 
@@ -35,21 +38,26 @@ def update_todo(request, pk):
         }
     )
     
-def create_todo(request):
-    myTodo = TodoList()
+# def create_todo(request):
+#     myTodo = TodoList()
     
-    if request.method == 'POST':
-        myTodo.todo = request.POST['todo']
-        myTodo.description = request.POST['description']
-        myTodo.important = request.POST.get('important') == 'on'
-        myTodo.complete = request.POST.get('complete') == 'on'
-        myTodo.save()
-        return redirect('todos')
+#     if request.method == 'POST':
+#         myTodo.todo = request.POST['todo']
+#         myTodo.description = request.POST['description']
+#         myTodo.important = request.POST.get('important') == 'on'
+#         myTodo.complete = request.POST.get('complete') == 'on'
+#         myTodo.save()
+#         return redirect('todos')
     
-    return render(
-        request,
-        'todo/todo_create.html'
-    )
+#     return render(
+#         request,
+#         'todo/todo_create.html'
+#     )
+
+class create_todo(LoginRequiredMixin, CreateView):
+    model = TodoList
+    fields = ['todo', 'description', 'important']
+    login_url = '/accounts/signin'
     
 def todos(request):
     todolist = TodoList.objects.all()
